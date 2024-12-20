@@ -1,10 +1,13 @@
-const WebSocket = require('ws');
+let clients = new Set();
 
-const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+    clients.add(ws);
 
-wss.on('connection', ws => {
-    ws.on('message', message => {
-        console.log('received: %s', message);
-        ws.send(`Echo: ${message}`);
+    // Notify existing clients about the new user
+    broadcast(JSON.stringify({ type: 'user_connected', count: clients.size }), ws);
+
+    ws.on('message', (message) => {
+        // Broadcast the received message to all other clients
+        broadcast(message, ws);
     });
-});
