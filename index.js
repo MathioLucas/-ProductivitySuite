@@ -16,3 +16,16 @@ wss.on('connection', (ws) => {
         // Broadcast the received message to all other clients
         broadcast(message, ws);
     });
+
+
+ ws.on('close', () => {
+        console.log('Client disconnected');
+        clients.delete(ws);
+        // Notify remaining clients about the user leaving
+        broadcast(JSON.stringify({ type: 'user_disconnected', count: clients.size }), ws);
+    });
+
+    ws.on('error', (error) => {
+        console.error(`WebSocket error: ${error}`);
+    });
+});
