@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from routers import tasks, ai_assistant
 from sqlalchemy.orm import Session
 from db import SessionLocal, Base, engine
+from routers import ai_assistant
 
 Base.metadata.create_all(bind=engine)
 
