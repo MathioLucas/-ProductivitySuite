@@ -24,3 +24,5 @@ const collaborationSlice = createSlice({
         },
     },
 });
+export const { setContent, updateContent, setUsers } = collaborationSlice.actions;
+export default collaborationSlice.reducer;
