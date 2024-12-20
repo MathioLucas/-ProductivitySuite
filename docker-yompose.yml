@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - db
+
+  websocket:
+    build: ./websocket-server
+    ports:
+      - "8080:8080"
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: productivity
+
+  redis:
+    image: redis:latest
+
+  minio:
+    image: minio/minio
+    command: server /data
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
