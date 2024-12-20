@@ -35,3 +35,32 @@ const CollaborativeEditor: React.FC = () => {
         ws.current.onclose = () => {
             console.log('WebSocket disconnected');
         };
+
+        eturn () => {
+            ws.current?.close();
+        };
+    }, [dispatch]);
+
+    const handleChange = (content: string, delta: any, source: string, editor: any) => {
+        if (source === 'user') {
+            dispatch(updateContent(content));
+            ws.current?.send(JSON.stringify({ type: 'content_update', content }));
+        }
+    };
+
+    return (
+        <div className="p-4">
+            <h2 className="text-xl font-bold mb-2">Collaborative Editor</h2>
+            <p className="mb-4">Active Users: {users}</p>
+            <ReactQuill
+                ref={quillRef}
+                theme="snow"
+                value={content}
+                onChange={handleChange}
+                className="h-96"
+            />
+        </div>
+    );
+};
+
+export default CollaborativeEditor;
