@@ -7,11 +7,10 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Include routers
+# routers
 app.include_router(tasks.router)
 app.include_router(ai_assistant.router)
 
-# Dependency
 def get_db():
     db = SessionLocal()
     try:
