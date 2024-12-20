@@ -29,3 +29,13 @@ wss.on('connection', (ws) => {
         console.error(`WebSocket error: ${error}`);
     });
 });
+
+function broadcast(data, sender) {
+    for (let client of clients) {
+        if (client !== sender && client.readyState === WebSocket.OPEN) {
+            client.send(data);
+        }
+    }
+}
+
+console.log(`WebSocket server is running on ws://localhost:${PORT}`);
